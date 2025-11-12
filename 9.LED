@@ -1,0 +1,60 @@
+#include<p18f4520.h> 
+#pragma config OSC=HS 
+#pragma config PWRT=OFF 
+#pragma config WDT=OFF 
+#pragma config DEBUG=OFF, LVP=OFF 
+#define SW1 PORTBbits.RB0 
+#define SW2 PORTBbits.RB1 
+#define RELAY PORTBbits.RB3 
+#define D1 PORTBbits.RB4 
+#define D2 PORTBbits.RB5 
+#define D3 PORTBbits.RB6 
+#define D4 PORTBbits.RB7 
+void msdelay(unsigned int itime); 
+int main(void) 
+{ 
+TRISBbits.TRISB0=1; 
+TRISBbits.TRISB1=1; 
+TRISBbits.TRISB2=0; 
+TRISBbits.TRISB3=0; 
+TRISBbits.TRISB4=0; 
+TRISBbits.TRISB5=0; 
+TRISBbits.TRISB6=0; 
+TRISBbits.TRISB7=0; 
+ADCON1 = 0x0F; 
+D1=0; D2=0; D3=0; D4=0; 
+RELAY=0; 
+while(1) 
+{ 
+if(SW1==0 && SW2==1) 
+{ 
+RELAY=1; 
+D1=1; D2=0; D3=0; D4=0; 
+msdelay(80); 
+D1=0; D2=1; D3=0; D4=0; 
+msdelay(80); 
+D1=0; D2=0; D3=1; D4=0; 
+msdelay(80); 
+D1=0; D2=0; D3=0; D4=1; 
+msdelay(80); 
+} 
+if(SW1==1 && SW2==0) 
+{ 
+RELAY=0; 
+D1=0; D2=0; D3=0; D4=1; 
+msdelay(80); 
+D1=0; D2=0; D3=1; D4=0; 
+msdelay(80); 
+D1=0; D2=1; D3=0; D4=0; 
+msdelay(80); 
+D1=1; D2=0; D3=0; D4=0; 
+msdelay(80); 
+} 
+} 
+} 
+{ 
+void msdelay(unsigned int itime) 
+int i,j; 
+for(i=0;i<itime;i++) 
+for(j=0;j<135;j++); 
+}
